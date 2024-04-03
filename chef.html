@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodAPI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 400px;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    #reqBtn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    #reqBtn:hover {
+      background-color: #0056b3;
+    }
+
+    #payBtn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #payBtn:hover {
+      background-color: #218838;
+    }
+
+    p {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FoodAPI</h1>
+    <h2>Fetch Produce</h2>
+    <select id="produce_select">
+      <option value="apple">Apple</option>
+      <option value="banana">Banana</option>
+      <option value="orange">Orange</option>
+      <option value="grape">Grape</option>
+      <option value="strawberry">Strawberry</option>
+      <option value="watermelon">Watermelon</option>
+      <option value="pineapple">Pineapple</option>
+      <option value="kiwi">Kiwi</option>
+      <option value="pear">Pear</option>
+      <option value="peach">Peach</option>
+    </select>
+    <input id="quantity_input" type="number" placeholder="Enter quantity" min="1">
+    <button id="reqBtn">Request Produce</button>
+    <button id="payBtn">Payment</button>
+    <p id="message1"></p>
+  </div>
+
+  <script>
+    const messageElement1 = document.getElementById('message1');
+
+    document.getElementById('reqBtn').addEventListener('click', () => {
+        // This button only triggers after payment
+        messageElement1.textContent = "Please make payment to proceed.";
+      });
+
+    document.getElementById('payBtn').addEventListener('click', () => {
+      const produceType = document.getElementById('produce_select').value;
+      const quantity = parseInt(document.getElementById('quantity_input').value);
+
+      if (quantity <= 0) {
+        messageElement1.textContent = "Please enter a valid quantity.";
+        return;
+      }
+
+      fetch(`http://localhost:3000/api/produce?type=${produceType}&quantity=${quantity}`)
+        .then(response => response.json())
+        .then(data => {
+          messageElement1.textContent = data.message;
+        })
+        .catch(error => console.error('Error fetching message:', error));
+    });
+  </script>
+</body>
+</html>
